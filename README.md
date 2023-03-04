@@ -87,29 +87,12 @@ We don't know the name of Lily's pet yet. Let's leave it to the backend to answe
 
 1. In the terminal running your frontend (should be the first terminal), do `command + C` or `ctrl + C` to stop the frontend.
 1. Just to confirm, observe that the location of this terminal is at `lily-frontend`.
-1. Install `axios`: `npm install --save axios`
+1. Install `axios`.
+   ```bash
+   npm install --save axios
+   ```
 1. Observe that `axios` is now added to the `package.json` file in your frontend folder.
 1. Now, open the file `src/App.ts`.
-1. Observe the top few lines of the file. They all start with `import ...`.
-1. At the end of this block of code, add a new line:
-    ```ts
-    import axios from 'axios';
-    ```
-1. In the function below, add:
-    ```ts
-    axios.get('127.0.0.1:5000/pet');
-    ```
-    Such that it looks like:
-    ```ts
-    function App() {
-        axios.get<string>('127.0.0.1:5000/pet');
-
-        return (
-            ...
-        )
-    }
-    ```
-    > Now, the `axios` library will try to get an answer from your backend at `127.0.0.1:5000/pet`. We haven't added the path `/pet` in the backend yet so the answer here will be empty.
 1. Set `petName` as a React state:
 
    Since React does not know when to expect an answer from our backend, as backends sometimes can be really slow, we need to define in the code when to expect the answer. Let's use `React.useState` for this purpose.
@@ -126,6 +109,11 @@ We don't know the name of Lily's pet yet. Let's leave it to the backend to answe
             ```
             <p>Lily's pet is called {petName}.</p>
             ```
+1. Observe the top few lines of the file. They all start with `import ...`.
+1. At the end of this block of code, add a new line:
+    ```ts
+    import axios from 'axios';
+    ```
 1. Call the backend with `axios` in a React useEffect block:
 
    When the frontend is loaded in your web browser, the `App` component can be rendered so many times due to several reasons, but not always relevant to the pet name.
@@ -154,6 +142,7 @@ We don't know the name of Lily's pet yet. Let's leave it to the backend to answe
                 .then(response => setPetName(response.data));
         }, [])
         ```
+    > Now, the `axios` library will try to get an answer from your backend at `127.0.0.1:5000/pet`. We haven't added the path `/pet` in the backend yet so the answer here will be empty.
 1. Start the frontend again by running `npm start` in the terminal.
 
 ### Let your backend provide the name
