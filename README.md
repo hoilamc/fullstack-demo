@@ -107,7 +107,7 @@ We don't know the name of Lily's pet yet. Let's leave it to the backend to answe
             ```
             to: 
             ```
-            <p>Lily's pet is called {petName}.</p>
+            Lily's pet is called {petName}.
             ```
 1. Observe the top few lines of the file. They all start with `import ...`.
 1. At the end of this block of code, add a new line:
@@ -123,10 +123,10 @@ We don't know the name of Lily's pet yet. Let's leave it to the backend to answe
    So, we will put the backend call into a `useEffect()` block, setting the dependency to `[]` to tell React that this call does not depend on anything. It is just a call that only needs to happen once.
    1. After where the state `petName` is defined, add an empty `useEffect` block:
       ```ts
-        useEffect(() => {
-            // ... backend call goes here
-        }, [])
-        ```
+      React.useEffect(() => {
+          // ... backend call goes here
+      }, [])
+      ```
        Note that the `[]` is the empty dependency mentioned in the above description.
     1. After the comment `// ... backend call goes here`, add the backend call:
         ```ts
@@ -138,11 +138,11 @@ We don't know the name of Lily's pet yet. Let's leave it to the backend to answe
         ```ts
         useEffect(() => {
             // ... backend call goes here
-            axios.get<string>('127.0.0.1:5000/pet')
+            axios.get<string>('http://127.0.0.1:5000/pet')
                 .then(response => setPetName(response.data));
         }, [])
         ```
-    > Now, the `axios` library will try to get an answer from your backend at `127.0.0.1:5000/pet`. We haven't added the path `/pet` in the backend yet so the answer here will be empty.
+    > Now, the `axios` library will try to get an answer from your backend at `http://127.0.0.1:5000/pet`. We haven't added the path `/pet` in the backend yet so the answer here will be empty.
 1. Start the frontend again by running `npm start` in the terminal.
 
 ### Let your backend provide the name
