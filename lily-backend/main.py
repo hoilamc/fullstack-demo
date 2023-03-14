@@ -2,14 +2,11 @@ from flask import Flask
 from flask_cors import CORS
 
 
-DEV_FRONTEND = "http://localhost:3000"
-# PROD_FRONTEND = ""
-
+DEV_FRONTEND = "http://127.0.0.1:3000"
 
 app = Flask(__name__)
 CORS(app, origins=[
     DEV_FRONTEND, 
-    # PROD_FRONTEND
 ])
 
 @app.route("/")

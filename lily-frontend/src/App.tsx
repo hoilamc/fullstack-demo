@@ -8,9 +8,10 @@ function App() {
 
   React.useEffect(() => {
     // ... backend call goes here
-    axios.get<string>('http://127.0.0.1:5000/pet')
+    axios.get<string>('http://127.0.0.1:5432/pet')
       .then(response => setPetName(response.data));
   }, [])
+
   return (
     <div className="App">
       <header className="App-header">

@@ -1,3 +1,5 @@
+I am working on Mac OS.
+
 My main tech stack:
 
 What I installed | Version
@@ -7,37 +9,52 @@ Python   | 3.8.9
 Flask    | 2.2.2
 Werkzeug | 2.2.2
 
+## Initializing frontend and backend
 ### Frontend setup
-> Follow this guide: https://create-react-app.dev/docs/adding-typescript/
+> Reference to this guide: https://create-react-app.dev/docs/adding-typescript/
 
-> Make sure to download node.js
+1. Open a new Terminal.
+<!-- This will be your frontend terminal where you do frontend-related tasks. -->
+1. Go into your folder/repository where you will work on this project. For me, the repository name is `fullstack-demo`, so my path should end with `/fullstack-demo`.
+    > You can check your path with the `pwd` command. Use the `cd` command to navigate into your repository.
+1. Create a React frontend project that is in TypeScript.
 
-1. Open a new Terminal. This will be your frontend terminal where you do frontend-related tasks.
-1. Make sure that the location is inside `fullstack-demo`, the name of the repository. You can do `pwd` to verify. If not, `cd` to the correct path.
-1. `npx create-react-app lily-frontend --template typescript`
+    ```bash
+    npx create-react-app lily-frontend --template typescript`
+    ```
+    If the following question pops up, just type `y` then press "enter".
     ```
     Need to install the following packages:
     create-react-app
     Ok to proceed? (y) y
     ```
-1. `cd lily-frontend`
-1. `npm start`
-1. A browser should be opened automatically where you can see a rotating React icon. This is your frontend!
-1. Observe that the URL is at `localhost:3000`.
+1. Go into the `lily-frontend` folder.
+   ```
+   cd lily-frontend
+   ```
+1. Start the frontend.
+    ```
+    npm start
+    ```
+1. A browser should then pop up automatically. The URL is at `localhost:3000`. There is a rotating React atom icon. This is your frontend project running in the browser!
 
 ### Backend setup
-> Follow this guide: https://flask.palletsprojects.com/en/2.2.x/quickstart/
+> Reference to this guide: https://flask.palletsprojects.com/en/2.2.x/quickstart/
 
-> You can confiure a python virtual environment following this guide:
-> https://flask.palletsprojects.com/en/2.2.x/installation/#virtual-environments
-1. Open a new Terminal. This will be your backend terminal where you do backend-related tasks.
-1. Make sure that the location is inside `fullstack-demo`, the name of the repository. You can do `pwd` to verify. If not, `cd` to the correct path.
-1. Prepare a backend folder: `mkdir lily-backend`
-1. Go inside the backend folder.
+1. Open a new Terminal.
+ <!-- This will be your backend terminal where you do backend-related tasks. -->
+1. Go into your folder/repository where you will work on this project. For me, the repository name is `fullstack-demo`, so my path should end with `/fullstack-demo`.
+    > You can check your path with the `pwd` command. Use the `cd` command to navigate into your repository.
+1. Create a folder for your backend project.
+    ```bash
+    mkdir lily-backend
+    ```
+1. Go into the backend folder.
    ```bash
    cd lily-backend
    ```
 1. Prepare a python virtual environment for the backend.
+    > Reference to this guide: https://flask.palletsprojects.com/en/2.2.x/installation/#virtual-environments
     1. Create a python virtual environment.
        ```bash
        python3 -m venv lily-venv
@@ -46,7 +63,7 @@ Werkzeug | 2.2.2
        ```bash
        . lily-venv/bin/activate
        ```
-    1. Observe that `(lily-venv)` will be appended to the beginning of the line and becomes something like:
+    1. Observe that `(lily-venv)` will show up on your terminal, at the beginning of the line where you type commands.
        ```
        (lily-venv) lilychan@Lilys-MacBook-Pro lily-backend %
        ```
@@ -54,7 +71,7 @@ Werkzeug | 2.2.2
    ```bash
    pip install Flask
    ```
-1. Take a record of the current list of dependencies:
+1. Take a record of the current list of dependencies that is installed in the virtual environment.
     ```bash
     pip freeze > requirements.txt
     ```
@@ -70,79 +87,96 @@ Werkzeug | 2.2.2
         return "<p>Hello, World!</p>"
 
     ```
-1. In your backend terminal, run `flask --app main run`. This is now the terminal running your backend.
-1. Try to open this link in a browser: `127.0.0.1:5000`.
-    You should see `Hello, World!`
-1. Observe that in your backend Terminal, there is at least a line that looks like this:
+1. Start the backend.
     ```
-    127.0.0.1 - - [04/Mar/2023 21:16:35] "GET /pet HTTP/1.1" 200 -
+    flask --app main run --port 5432
+    ```
+    > The default port 5000 is taken by the airPlay receiver on mac, so I am using port 5432.
+1. Try to open this in a browser: `127.0.0.1:5432`.
+    You should see `Hello, World!`
+1. Observe that in the terminal running your backend, there is at least one line that looks like this:
+    ```
+    127.0.0.1 - - [04/Mar/2023 21:16:35] "GET / HTTP/1.1" 200 -
     ```
 
-### Make your frontend show Lily's pet name
+## Make the frontend show some data from your backend
+Now, the scenario is simple:
+
+Show this sentence "Lily's pet is called Teddy!" on the frontend, where "Teddy" is a piece of data provided by the backend.
+
+### Frontend
 Now, let's make the frontend show this sentence:
 
 **Lily's pet is called `xxxxx`!**
 
-We don't know the name of Lily's pet yet. Let's leave it to the backend to answer.
+The frontend does not know the name of Lily's pet yet. Let's make the frontend ask the backend for the answer.
 
-1. In the terminal running your frontend (should be the first terminal), do `command + C` or `ctrl + C` to stop the frontend.
+1. In the terminal running your frontend (should be the first terminal that you created), do `command + C` to stop the frontend.
 1. Just to confirm, observe that the location of this terminal is at `lily-frontend`.
+    > You can check your path with the `pwd` command. Use the `cd` command to navigate into your frontend folder.
 1. Install `axios`.
    ```bash
    npm install --save axios
    ```
-1. Observe that `axios` is now added to the `package.json` file in your frontend folder.
-1. Now, open the file `src/App.ts`.
-1. Set `petName` as a React state:
+1. Observe that `axios` is now added to `package.json` in your frontend folder
+1. Now, open the file `src/App.ts` in a text editor.
+1. Create a React state called `petName`:
+   > Why not just create a variable?
+   >
+   > Backends take time to answer. So, the moment when the frontend loads, the backend usaually has not answered yet.
+   > If we store the answer in a variable, the code would not notice when the answer has arrived, hence not showing it on the frontend page.
+   > 
+   > React state helps us by telling the code when the answer arrives, so our frontend page knows to update the page with the answer obtained.
 
-   Since React does not know when to expect an answer from our backend, as backends sometimes can be really slow, we need to define in the code when to expect the answer. Let's use `React.useState` for this purpose.
     1. Add this line at the top of the `App` function:
        ```ts
        const [petName, setPetName] = React.useState<string>('');
        ```
-    1. Now, put the `petName` to part of the returned frontend:
-        1. Replace the following line:
-            ```
-            Edit <code>src/App.ts</code> and save to reload.
-            ```
-            to: 
-            ```
-            Lily's pet is called {petName}.
-            ```
-1. Observe the top few lines of the file. They all start with `import ...`.
+    1. Replace the following line:
+        ```
+        Edit <code>src/App.ts</code> and save to reload.
+        ```
+        with: 
+        ```
+        Lily's pet is called {petName}.
+        ```
+1. Observe the top few lines of the file. They all start with `import`.
 1. At the end of this block of code, add a new line:
     ```ts
     import axios from 'axios';
     ```
-1. Call the backend with `axios` in a React useEffect block:
+1. Call the backend with `axios`.
 
-   When the frontend is loaded in your web browser, the `App` component can be rendered so many times due to several reasons, but not always relevant to the pet name.
-
-   We don't want to call the backend as many times as the `App` component is rendered due to whatever reasons.
-   
-   So, we will put the backend call into a `useEffect()` block, setting the dependency to `[]` to tell React that this call does not depend on anything. It is just a call that only needs to happen once.
+    > Why `useEffect`?
+    > 
+    > When the frontend is loaded in your web browser, the `App` component can be rendered so many times due to several reasons. They are not always relevant to what you are trying to do.
+    > 
+    > Since the backend call is part of the `App` component, it means the frontend will call the backend as many times as the `App` component is rendered.
+    > This is wasting resources. Imagine your neighbour knocking on your door several times in a roll for the same request.
+    > 
+    > So, we will put the backend call in a `useEffect()` block, which means our backend call should only run as many times as it requires. In our case, only once.
    1. After where the state `petName` is defined, add an empty `useEffect` block:
-      ```ts
+      ```tsx
       React.useEffect(() => {
           // ... backend call goes here
       }, [])
       ```
-       Note that the `[]` is the empty dependency mentioned in the above description.
+       Note that the `[]` tells React to only run the backend call once. More info about dependencies: https://beta.reactjs.org/reference/react/useEffect#parameters
     1. After the comment `// ... backend call goes here`, add the backend call:
         ```ts
-        axios.get<string>('127.0.0.1:5000/pet')
+        axios.get<string>('127.0.0.1:5432/pet')
           .then(response => setPetName(response.data));
         ```
-       Note that I expect the `data` of the backend response to be `Teddy`, so I call `setPetName` to set that as the `petName`.
+       Note that I expect the `data` of the backend response to be `Teddy`, so I use `setPetName` to set that as the `petName`.
     1. Check that the block of code should look like this:
         ```ts
         useEffect(() => {
             // ... backend call goes here
-            axios.get<string>('http://127.0.0.1:5000/pet')
+            axios.get<string>('http://127.0.0.1:5432/pet')
                 .then(response => setPetName(response.data));
         }, [])
         ```
-    > Now, the `axios` library will try to get an answer from your backend at `http://127.0.0.1:5000/pet`. We haven't added the path `/pet` in the backend yet so the answer here will be empty.
+    > Now, the `axios` library will try to get an answer from your backend at `http://127.0.0.1:5432/pet`. We haven't added the path `/pet` in the backend yet so the answer here will be empty.
 1. Start the frontend again by running `npm start` in the terminal.
 
 ### Let your backend provide the name
@@ -155,11 +189,11 @@ So, let me make my backend answer this question -- the pet name is Teddy.
     def get_pet():
         return "Teddy"
     ```
-    Such that when someone goes to `127.0.0.1:5000/pet`, they will see the answer "Teddy".
+    Such that when someone goes to `127.0.0.1:5432/pet`, they will see the answer "Teddy".
 1. Open the terminal that is running your backend.
-1. Do `command + C` or `ctrl + C` to stop the backend, since it is outdated now.
-1. Run `flask --app main run` again, such that your backend is now running with the latest changes.
-1. Go to `127.0.0.1:5000/pet` in a web browser. You should see `Teddy`.
+1. Do `command + C` to stop the backend, since it is outdated now.
+1. Run `flask --app main run --port 5432` again, such that your backend is now running with the latest changes.
+1. Go to `127.0.0.1:5432/pet` in a web browser. You should see `Teddy`.
 
 Now, the frontend should be ready! Right?
 
